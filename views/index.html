@@ -1,0 +1,17 @@
+{{ define "index" }}
+    <!DOCTYPE html>
+        <html lang="ru">
+        <head>
+            <meta charset="UTF-8">
+            <title>Todo gRPC Gateway</title>
+            <script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js"></script>
+            <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+            <link rel="icon" type="image/png" sizes="32x32" href="/static/img/favicon.png">
+            <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+            <link rel="stylesheet" type="text/css" href="/static/css/todos.css">
+        </head>
+        <body translate="no">
+            {{ template "todos" . }}
+        </body>
+    </html>
+{{ end }}

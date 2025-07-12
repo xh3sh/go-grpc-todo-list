@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  go-grpc-todo-list:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: go-grpc-todo-list
+    container_name: go-grpc-todo-list
+    environment:
+      - TZ=UTC
+    networks:
+      - projects_network
+    restart: unless-stopped
+
+networks:
+  projects_network:
+    driver: bridge
+    name: projects_network
+    ipam:
+      config:
+        - subnet: 172.19.0.0/24

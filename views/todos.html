@@ -1,0 +1,65 @@
+{{ define "todos" }}
+<div class="todos-container">
+  <div class="todos-swagger"><a href="https://xh3sh.ru/swagger/?urls.primaryName=go-grpc-todo-list" target="_blank">Swagger API</a></div>
+  <div class="todos-title">Список задач</div>
+
+  <!-- Форма отправляется на /api/v1/todos и добавляет <li> в конец .todo-list -->
+  <form hx-ext="json-enc" hx-encoding="json" name="task-form" id="task-form" class="task-form"
+    hx-post="/htmx/todo/" hx-target=".todo-list" hx-swap="beforeend" + hx-on::after-request="
+  if (event.detail.successful) {
+    this.reset();
+    // поиск и удаление сообщения «Нет задач» после успешного добавления
+     const empty = document.querySelector('.empty-message');
+     if (empty) empty.remove();
+  }">
+
+    <input type="text" name="title" placeholder="Название задачи..." required class="task-form title" />
+    <textarea type="text" class="task-form description" name="description" placeholder="Описание..." form="task-form"
+      wrap="hard" spellcheck="true" maxlength="270"></textarea>
+    <button class="task-form button" type="submit">Добавить</button>
+  </form>
+
+
+  <ul class="todo-list">
+    {{ range .Todos }}
+      {{ template "todo-item" . }}
+    {{ end }}
+
+
+    {{ if not .Todos }}
+      <li class="empty-message">Нет задач</li>
+    {{ end }}
+  </ul>
+</div>
+{{ end }}
+
+
+
+{{ define "todo-item" }}
+<li class="todo-item" id="todo-{{ .Id }}">
+  <div style="flex:1;display: flex; justify-content: space-between; align-items: center;">
+    <span class="todo-title">{{ .Title }}</span>
+    <div class="todo-actions">
+      <label class="todo-done">
+        <input hx-ext="json-enc" hx-encoding="json" type="checkbox" name="done" {{ if .Done
+          }}checked{{ end }} hx-patch="/htmx/todo/{{ .Id }}" hx-vals='{"Id":"{{ .Id }}","done":{{ not .Done }}}'
+          hx-trigger="change" hx-target="#todo-{{ .Id }}" hx-swap="outerHTML" />
+        <span>{{ if .Done }}Готово{{ else }}Не готово{{ end }}</span>
+      </label>
+    </div>
+  </div>
+
+  {{ if .Description }}
+    <div class="todo-desc">{{ .Description }}</div>
+  {{ end }}
+
+  <div class="todo-footer">
+    <input class="todo-date" type="datetime-local" readonly value="{{ .Date }}" step="1">
+    <button class="todo-item button" hx-on="htmx:beforeRequest: console.log('DELETE →', event.detail)"
+      hx-delete="/htmx/todo/{{ .Id }}" hx-target="#todo-{{ .Id }}" hx-swap="delete">
+      Удалить
+    </button>
+  </div>
+
+</li>
+{{ end }}

@@ -1,0 +1,154 @@
+.todos-swagger {
+  display: flex;
+  justify-content: right;
+}
+
+.todos-swagger a {
+  color: wheat;
+}
+
+.todos-container {
+  max-width: 500px;
+  margin: 40px auto;
+  background: #1e1b22;
+  /* Оттенок тёмного фона */
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+  padding: 5px 24px 24px 24px;
+}
+
+.todos-title {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 24px;
+  text-align: center;
+  color: #eee;
+}
+
+.todo-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+.todo-item {
+  padding: 10px 0;
+  border-bottom: 1px solid #333;
+}
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-item.button {
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: red;
+  outline: none;
+}
+
+.todo-item.button::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  background: rgb(167, 38, 38);
+  transition: width 0.3s ease;
+}
+
+.todo-item.button:hover::after {
+  width: 100%;
+}
+
+.todo-title {
+  font-size: 1.1rem;
+  color: #ddd;
+}
+
+.todo-desc {
+  color: #888;
+  font-size: 0.95em;
+  margin-top: 4px;
+  white-space: pre-wrap;
+}
+
+.todo-date {
+  padding: 0;
+  outline: none;
+  border: none;
+  color: white;
+  background-color: transparent;
+}
+
+.todo-footer {
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.todo-actions {
+
+  display: flex;
+  gap: 8px;
+}
+
+.todo-done span {
+  color: #777;
+  cursor: pointer;
+}
+
+.empty-message {
+  text-align: center;
+  color: #666;
+  margin: 24px 0;
+}
+
+/* Форма добавления */
+.task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.task-form.title {
+  outline: none;
+  border: none;
+  color: wheat;
+  border-bottom: 1px solid wheat;
+  background-color: transparent;
+  max-width: 100%;
+  min-width: 100%;
+}
+
+.task-form.description {
+  border: none;
+  color: wheat;
+  border-bottom: 1px solid wheat;
+  outline: none;
+  background-color: transparent;
+  max-width: 100%;
+  min-width: 100%;
+  min-height: 80px;
+}
+
+.task-form.button {
+
+  color: wheat;
+  border: 1px solid wheat;
+  justify-content: center;
+  background-color: transparent;
+  width: 40%;
+  height: 40px;
+  margin: auto;
+
+  &:hover {
+    background-color: rgba(245, 222, 179, 0.2);
+    cursor: pointer;
+  }
+}
