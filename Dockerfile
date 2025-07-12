@@ -19,6 +19,7 @@ WORKDIR /app
 
 COPY --from=builder /app/main .
 COPY --from=builder /app/views ./views
+COPY --from=builder /app/static ./static
 COPY --from=builder /app/proto ./proto
 
 EXPOSE 80
