@@ -10,7 +10,7 @@ option (grpc.gateway.protoc_gen_openapiv2.options.openapiv2_swagger) = {
     title: "TodoService API";
     version: "1.0.0";
   };
-  base_path: "/api";
+  base_path: "/todos/api";
   schemes: HTTP;
   schemes: HTTPS;
   consumes: "application/json";

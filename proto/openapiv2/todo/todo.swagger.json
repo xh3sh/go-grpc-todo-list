@@ -9,7 +9,7 @@
       "name": "TodoService"
     }
   ],
-  "basePath": "/todos",
+  "basePath": "/todos/api",
   "schemes": [
     "http",
     "https"
@@ -21,7 +21,7 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/todos": {
+    "/v1/todos": {
       "get": {
         "summary": "Список всех задач",
         "operationId": "TodoService_ListTodos",

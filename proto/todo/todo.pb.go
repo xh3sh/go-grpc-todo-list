@@ -326,8 +326,9 @@ const file_todo_todo_proto_rawDesc = "" +
 	"DeleteTodo\x12\x13.todo.DeleteRequest\x1a\v.todo.Empty\"\x16\x82\xd3\xe4\x93\x02\x10*\x0e/v1/todos/{id}\x12L\n" +
 	"\n" +
 	"UpdateTodo\x12\x17.todo.UpdateTodoRequest\x1a\n" +
-	".todo.Todo\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*2\x0e/v1/todos/{id}B\x7f\x92AH\x12\x18\n" +
-	"\x0fTodoService API2\x051.0.0\"\x04/api*\x02\x01\x022\x10application/json:\x10application/jsonZ2github.com/xh3sh/go-grpc-todo-list/proto/todo;todob\x06proto3"
+	".todo.Todo\"\x19\x82\xd3\xe4\x93\x02\x13:\x01*2\x0e/v1/todos/{id}B\x85\x01\x92AN\x12\x18\n" +
+	"\x0fTodoService API2\x051.0.0\"\n" +
+	"/todos/api*\x02\x01\x022\x10application/json:\x10application/jsonZ2github.com/xh3sh/go-grpc-todo-list/proto/todo;todob\x06proto3"
 
 var (
 	file_todo_todo_proto_rawDescOnce sync.Once
