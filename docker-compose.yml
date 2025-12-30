@@ -10,13 +10,9 @@ services:
     environment:
       - TZ=UTC
     networks:
-      - projects_network
+      - projects-network
     restart: unless-stopped
 
 networks:
-  projects_network:
-    driver: bridge
-    name: projects_network
-    ipam:
-      config:
-        - subnet: 172.19.0.0/24
+  projects-network:
+    external: true

@@ -3,6 +3,8 @@ TODO_OUT     := proto
 GOOGLEAPIS   := third_party/googleapis
 GW_APIS      := third_party/grpc-gateway
 
+default: gen up
+
 .PHONY: gen
 gen:
 	protoc \
@@ -15,3 +17,7 @@ gen:
 	  --openapiv2_out=$(TODO_OUT)/openapiv2 \
 	  --openapiv2_opt logtostderr=true \
 	  $(PROTO_DIR)/todo/*.proto
+
+up:
+	docker network create projects-network || true
+	docker compose up -d --build
