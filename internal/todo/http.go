@@ -1,6 +1,7 @@
 package todo
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"html/template"
@@ -27,14 +28,31 @@ func init() {
 	}
 }
 
-// HTTP handler for rendering todos page
+func (s *Server) AuthMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userID := r.Header.Get("X-User-ID")
+		if userID == "" {
+			if c, err := r.Cookie("X-User-ID"); err == nil {
+				userID = c.Value
+			}
+		}
+
+		if userID != "" {
+			ctx := context.WithValue(r.Context(), UserIDKey, userID)
+			next.ServeHTTP(w, r.WithContext(ctx))
+		} else {
+			next.ServeHTTP(w, r)
+		}
+	})
+}
+
 func (s *Server) HandleTodosPage(w http.ResponseWriter, r *http.Request) {
-	s.mu.Lock()
-	todos := make([]*pb.Todo, 0, len(s.todos))
-	for _, t := range s.todos {
-		todos = append(todos, t)
+	userID := s.getUserID(r.Context())
+	todos, err := s.repo.List(r.Context(), userID)
+	if err != nil {
+		http.Error(w, "failed to list todos: "+err.Error(), http.StatusInternalServerError)
+		return
 	}
-	s.mu.Unlock()
 
 	tmpl, err := template.ParseFiles(
 		filepath.Join("views", "index.html"),
@@ -90,7 +108,6 @@ func (s *Server) HandleGetTodo(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) HandleCreateTodo(w http.ResponseWriter, r *http.Request) {
-	// Пример: парсим JSON и вызываем gRPC
 	var in pb.Todo
 	err := json.NewDecoder(r.Body).Decode(&in)
 	if err != nil {
@@ -124,7 +141,6 @@ func (s *Server) HandlePatchTodo(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Вернём HTML задачи — HTMX заменит весь <li>
 	if err := templates.ExecuteTemplate(w, "todo-item", todo); err != nil {
 		http.Error(w, "render error: "+err.Error(), http.StatusInternalServerError)
 	}
