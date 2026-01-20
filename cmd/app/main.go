@@ -6,12 +6,8 @@ import (
 	"log"
 	"net"
 	"net/http"
-	"os"
 
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"github.com/joho/godotenv"
-	"github.com/xh3sh/go-grpc-todo-list/internal/db"
-	"github.com/xh3sh/go-grpc-todo-list/internal/repo"
 	"github.com/xh3sh/go-grpc-todo-list/internal/todo"
 	pb "github.com/xh3sh/go-grpc-todo-list/proto/todo"
 	"google.golang.org/grpc"
@@ -27,22 +23,6 @@ var (
 
 func main() {
 	flag.Parse()
-	if err := godotenv.Load(); err != nil {
-		log.Println("env файл не найден, используются стандартные параметры")
-	}
-
-	redisAddr := os.Getenv("REDIS_ADDR")
-	if redisAddr == "" {
-		redisAddr = "localhost:6379"
-	}
-
-	rdb, err := db.NewRedisClient(redisAddr)
-	if err != nil {
-		log.Fatalf("Не удалось подключиться к Redis: %v", err)
-	}
-	ctx := context.Background()
-
-	todoRepo := repo.NewTodoRepository(rdb)
 
 	// 1. Запуск gRPC сервера
 	lis, err := net.Listen("tcp", *grpcAddr)
@@ -52,7 +32,7 @@ func main() {
 	grpcServer := grpc.NewServer()
 
 	// Экземпляр todo-сервера для gRPC и HTTP
-	todoServer := todo.NewServer(todoRepo)
+	todoServer := todo.NewServer()
 
 	pb.RegisterTodoServiceServer(grpcServer, todoServer)
 	go func() {
@@ -63,6 +43,7 @@ func main() {
 	}()
 
 	// 2. HTTP Gateway
+	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
@@ -105,7 +86,7 @@ func main() {
 
 	// 3. Запуск HTTP сервера
 	log.Printf("HTTP gateway listening on %s", *httpAddr)
-	if err := http.ListenAndServe(*httpAddr, todoServer.AuthMiddleware(rootMux)); err != nil {
+	if err := http.ListenAndServe(*httpAddr, rootMux); err != nil {
 		log.Fatalf("HTTP serve: %v", err)
 	}
 }

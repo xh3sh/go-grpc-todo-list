@@ -11,23 +11,6 @@
             <link rel="stylesheet" type="text/css" href="/static/css/todos.css">
         </head>
         <body translate="no">
-            <script>
-                (function() {
-                    const USER_ID_KEY = 'todo_user_id';
-                    let userId = localStorage.getItem(USER_ID_KEY);
-                    
-                    if (!userId) {
-                        userId = crypto.randomUUID();
-                        localStorage.setItem(USER_ID_KEY, userId);
-                    }
-                    
-                    document.body.addEventListener('htmx:configRequest', function(evt) {
-                        evt.detail.headers['X-User-ID'] = userId;
-                    });
-
-                    document.cookie = "X-User-ID=" + userId + "; path=/";
-                })();
-            </script>
             {{ template "todos" . }}
         </body>
     </html>
