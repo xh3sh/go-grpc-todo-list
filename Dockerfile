@@ -12,6 +12,9 @@ COPY . .
 # Build the application
 RUN go build -ldflags="-s -w" -o main ./cmd/app
 
+RUN mkdir -p /app/config-dist && \
+    ([ -f .env ] && cp .env /app/config-dist/ || true)
+
 # Stage 2: Final Image
 FROM alpine:latest
 
@@ -21,6 +24,7 @@ COPY --from=builder /app/main .
 COPY --from=builder /app/views ./views
 COPY --from=builder /app/static ./static
 COPY --from=builder /app/proto ./proto
+COPY --from=builder /app/config-dist/ .
 
 EXPOSE 80
 CMD ["./main"]
