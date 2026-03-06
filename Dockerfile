@@ -18,6 +18,9 @@ RUN mkdir -p /app/config-dist && \
 # Stage 2: Final Image
 FROM alpine:latest
 
+# Install tzdata for timezone support
+RUN apk add --no-cache tzdata
+
 WORKDIR /app
 
 COPY --from=builder /app/main .
@@ -25,6 +28,9 @@ COPY --from=builder /app/views ./views
 COPY --from=builder /app/static ./static
 COPY --from=builder /app/proto ./proto
 COPY --from=builder /app/config-dist/ .
+
+# Set timezone to Moscow
+ENV TZ=Europe/Moscow
 
 EXPOSE 80
 CMD ["./main"]
