@@ -129,7 +129,8 @@ func (s *Server) UpdateTodo(ctx context.Context, req *pb.UpdateTodoRequest) (*pb
 
 	current.Done = req.Done
 
-	if err := s.repo.Update(ctx, current); err != nil {
+	userID := s.getUserID(ctx)
+	if err := s.repo.Update(ctx, userID, current); err != nil {
 		return nil, status.Errorf(codes.Internal, "failed to update todo: %v", err)
 	}
 

@@ -41,6 +41,7 @@ func (r *TodoRepository) Save(ctx context.Context, userID string, t *pb.Todo) er
 	pipe := r.client.Pipeline()
 	pipe.Set(ctx, r.makeKey(t.Id), data, TodoTTL)
 	pipe.SAdd(ctx, r.makeUserKey(userID), t.Id)
+	pipe.Expire(ctx, r.makeUserKey(userID), TodoTTL)
 	_, err = pipe.Exec(ctx)
 	return err
 }
@@ -62,6 +63,8 @@ func (r *TodoRepository) Get(ctx context.Context, id string) (*pb.Todo, error) {
 }
 
 func (r *TodoRepository) List(ctx context.Context, userID string) ([]*pb.Todo, error) {
+	r.client.Expire(ctx, r.makeUserKey(userID), TodoTTL)
+
 	ids, err := r.client.SMembers(ctx, r.makeUserKey(userID)).Result()
 	if err != nil {
 		return nil, err
@@ -113,15 +116,20 @@ func (r *TodoRepository) Delete(ctx context.Context, userID string, id string) e
 	pipe := r.client.Pipeline()
 	pipe.Del(ctx, r.makeKey(id))
 	pipe.SRem(ctx, r.makeUserKey(userID), id)
+	pipe.Expire(ctx, r.makeUserKey(userID), TodoTTL)
 	_, err := pipe.Exec(ctx)
 	return err
 }
 
-func (r *TodoRepository) Update(ctx context.Context, t *pb.Todo) error {
+func (r *TodoRepository) Update(ctx context.Context, userID string, t *pb.Todo) error {
 	data, err := json.Marshal(t)
 	if err != nil {
 		return err
 	}
 
-	return r.client.Set(ctx, r.makeKey(t.Id), data, TodoTTL).Err()
+	pipe := r.client.Pipeline()
+	pipe.Set(ctx, r.makeKey(t.Id), data, TodoTTL)
+	pipe.Expire(ctx, r.makeUserKey(userID), TodoTTL)
+	_, err = pipe.Exec(ctx)
+	return err
 }
