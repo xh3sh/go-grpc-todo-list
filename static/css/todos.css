@@ -1,24 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+
 .todos-swagger {
   display: flex;
-  justify-content: right;
+  justify-content: flex-end;
 }
 
 .todos-swagger a {
   color: wheat;
+  font-size: clamp(0.8rem, 2vw, 0.9rem);
 }
 
 .todos-container {
-  max-width: 500px;
-  margin: 40px auto;
+  width: min(95vw, 500px);
+  margin: clamp(20px, 5vh, 40px) auto;
   background: #1e1b22;
-  /* Оттенок тёмного фона */
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
-  padding: 5px 24px 24px 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  padding: clamp(10px, 4vw, 24px);
 }
 
 .todos-title {
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 6vw, 2.2rem);
   font-weight: bold;
   margin-bottom: 24px;
   text-align: center;
@@ -32,8 +36,16 @@
 }
 
 .todo-item {
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #333;
+}
+
+.todo-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 .todo-item:last-child {
@@ -43,11 +55,12 @@
 .todo-item.button {
   cursor: pointer;
   position: relative;
-  padding: 0;
+  padding: 4px 0;
   background: transparent;
   border: none;
-  color: red;
+  color: #ff5252;
   outline: none;
+  font-size: 0.9rem;
 }
 
 .todo-item.button::after {
@@ -57,7 +70,7 @@
   bottom: 0;
   width: 0;
   height: 1px;
-  background: rgb(167, 38, 38);
+  background: #ff5252;
   transition: width 0.3s ease;
 }
 
@@ -65,90 +78,124 @@
   width: 100%;
 }
 
-.todo-title {
-  font-size: 1.1rem;
+.todo-item-title {
+  font-size: clamp(1rem, 3vw, 1.15rem);
   color: #ddd;
+  flex: 1;
+  min-width: 200px; /* Чтобы на узких экранах переносилось */
 }
 
 .todo-desc {
   color: #888;
-  font-size: 0.95em;
-  margin-top: 4px;
+  font-size: clamp(0.85rem, 2.5vw, 0.95rem);
+  margin-top: 8px;
   white-space: pre-wrap;
+  line-height: 1.4;
 }
 
 .todo-date {
   padding: 0;
   outline: none;
   border: none;
-  color: white;
+  color: #aaa;
   background-color: transparent;
+  font-size: 0.85rem;
 }
 
 .todo-footer {
-  padding-top: 20px;
+  padding-top: 12px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .todo-actions {
-
   display: flex;
+  align-items: center;
   gap: 8px;
+}
+
+.todo-done {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
 }
 
 .todo-done span {
   color: #777;
-  cursor: pointer;
 }
 
 .empty-message {
   text-align: center;
   color: #666;
-  margin: 24px 0;
+  margin: 32px 0;
+  font-style: italic;
 }
 
 /* Форма добавления */
 .task-form {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 24px;
 }
 
 .task-form.title {
   outline: none;
   border: none;
   color: wheat;
-  border-bottom: 1px solid wheat;
+  border-bottom: 1px solid rgba(245, 222, 179, 0.3);
   background-color: transparent;
-  max-width: 100%;
-  min-width: 100%;
+  width: 100%;
+  padding: 8px 0;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.task-form.title:focus {
+  border-bottom-color: wheat;
 }
 
 .task-form.description {
   border: none;
   color: wheat;
-  border-bottom: 1px solid wheat;
+  border-bottom: 1px solid rgba(245, 222, 179, 0.3);
   outline: none;
   background-color: transparent;
-  max-width: 100%;
-  min-width: 100%;
-  min-height: 80px;
+  width: 100%;
+  min-height: 60px;
+  padding: 8px 0;
+  font-size: 0.95rem;
+  resize: vertical;
+  transition: border-color 0.3s;
+}
+
+.task-form.description:focus {
+  border-bottom-color: wheat;
 }
 
 .task-form.button {
-
   color: wheat;
   border: 1px solid wheat;
   justify-content: center;
   background-color: transparent;
-  width: 40%;
-  height: 40px;
-  margin: auto;
+  width: min(100%, 180px);
+  height: 42px;
+  margin: 12px auto 0;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  transition: background-color 0.3s, transform 0.1s;
 
   &:hover {
-    background-color: rgba(245, 222, 179, 0.2);
+    background-color: rgba(245, 222, 179, 0.1);
     cursor: pointer;
+  }
+
+  &:active {
+    transform: scale(0.98);
   }
 }

@@ -37,8 +37,8 @@
 
 {{ define "todo-item" }}
 <li class="todo-item" id="todo-{{ .Id }}">
-  <div style="flex:1;display: flex; justify-content: space-between; align-items: center;">
-    <span class="todo-title">{{ .Title }}</span>
+  <div class="todo-item-header">
+    <span class="todo-item-title">{{ .Title }}</span>
     <div class="todo-actions">
       <label class="todo-done">
         <input hx-ext="json-enc" hx-encoding="json" type="checkbox" name="done" {{ if .Done
@@ -55,7 +55,7 @@
 
   <div class="todo-footer">
     <input class="todo-date" type="datetime-local" readonly value="{{ .Date }}" step="1">
-    <button class="todo-item button" hx-on="htmx:beforeRequest: console.log('DELETE →', event.detail)"
+    <button class="todo-item button" hx-on="htmx:beforeRequest: console.log('DEBUG: DELETE →', event.detail)"
       hx-delete="/htmx/todo/{{ .Id }}" hx-target="#todo-{{ .Id }}" hx-swap="delete">
       Удалить
     </button>
